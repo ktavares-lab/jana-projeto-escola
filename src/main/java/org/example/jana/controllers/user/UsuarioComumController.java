@@ -32,7 +32,7 @@ public class UsuarioComumController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         try {
-            var usuarios = usuarioComumService.listar();
+            var usuario = usuarioComumService.listar();
             if(usuarios.isEmpty()){
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
             } else {
