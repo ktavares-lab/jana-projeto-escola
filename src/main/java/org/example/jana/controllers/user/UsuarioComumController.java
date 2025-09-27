@@ -4,13 +4,13 @@ package org.example.jana.controllers.user;
 
 
 import com.google.gson.Gson;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.jana.dao.user.UsuarioComumDAO;
 import org.example.jana.service.user.UsuarioComumService;
+import org.example.jana.utils.RespostaUtils;
 
 
 import java.io.IOException;
@@ -30,20 +30,12 @@ public class UsuarioComumController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("application/json");
         try {
-            var usuario = usuarioComumService.listar();
-            if(usuarios.isEmpty()){
-                resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
-            } else {
-                resp.getWriter().write(gson.toJson(usuarios));
-                resp.setStatus(HttpServletResponse.SC_OK);
-            }
+            var usuarios = usuarioComumService.listar();
+            RespostaUtils.sendSuccess(resp, 200, usuarios);
         } catch (SQLException e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            Map<String, String> error = new HashMap<>();
-            error.put("Erro", e.getMessage());
-            resp.getWriter().write(gson.toJson(error));
+            RespostaUtils.sendError(resp, 500, "Erro ao buscar usuarios: " + e.getMessage());
         }
+
     }
 }
